@@ -1,0 +1,402 @@
+{
+	"info": {
+		"_postman_id": "ce058809-769f-4286-ade3-8134156cf829",
+		"name": "Endpoint",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1_Object_info_1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Проверка статуса кода 200\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Проверка структуры JSON в ответе \r",
+							"var schema = {\r",
+							"    \"tupe\": \"object\",\r",
+							"    \"propertis\": {\r",
+							"        \"age\": {\"tupe\": \"number\"},\r",
+							"        \"daily_food\": {\"tupe\": \"number\"},\r",
+							"        \"name\": {\"tupe\": \"string\"}\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Validate schema\", () => {\r",
+							"    pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							"\r",
+							"// Проверка коэффициентов умножения weight\r",
+							"let jsonData = pm.response.json();\r",
+							"let dailyFood = jsonData['daily_food']\r",
+							"let dailySleep = jsonData[' dailySleep']\r",
+							"let weight = request.data.weight\r",
+							"pm.test('Validate daily_food and dailySleep multiplier', () => {\r",
+							"    weight * 0.012 === dailyFood &&\r",
+							"    weight * 2.5 === dailySleep;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://116.203.27.46:5002/object_info_1?age=15&weight=20&name=Nell",
+					"protocol": "http",
+					"host": [
+						"116",
+						"203",
+						"27",
+						"46"
+					],
+					"port": "5002",
+					"path": [
+						"object_info_1"
+					],
+					"query": [
+						{
+							"key": "age",
+							"value": "15"
+						},
+						{
+							"key": "weight",
+							"value": "20"
+						},
+						{
+							"key": "name",
+							"value": "Nell"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2_Object_info_2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Проверка кода ответа от сервера\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"// Проверка структуры JSON в ответе\r",
+							"var schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"required\": [\r",
+							"        \"person\",\r",
+							"        \"qa_salary_after_1.5_year\",\r",
+							"        \"qa_salary_after_12_months\",\r",
+							"        \"qa_salary_after_3.5_years\",\r",
+							"        \"qa_salary_after_6_months\",\r",
+							"        \"start_qa_salary\"\r",
+							"    ],\r",
+							"    \"properties\":{\r",
+							"        \"person\": {\r",
+							"            \"type\": \"object\",\r",
+							"            \"required\": [\r",
+							"                \"u_age\",\r",
+							"                \"u_name\",\r",
+							"                \"u_salary_5_years\"\r",
+							"            ],\r",
+							"            \"properties\": {\r",
+							"                \"u_age\":{\"type\": \"integer\"},\r",
+							"                \"u_name\": {\r",
+							"                    \"type\": \"array\",\r",
+							"                    \"items\": [\r",
+							"                        {\"type\": \"string\"},\r",
+							"                        {\"type\": \"integer\"},\r",
+							"                        {\"type\": \"integer\"}\r",
+							"                    ]\r",
+							"                },\r",
+							"                \"u_salary_5_year\": {\"type\": \"integer\"}\r",
+							"            }\r",
+							"        },\r",
+							"        \"qa_salary_after_1.5_year\": {\"type\": \"number\"},\r",
+							"        \"qa_salary_after_12_months\": {\"type\": \"integer\"},\r",
+							"        \"qa_salary_after_3.5_years\": {\"type\": \"integer\"},\r",
+							"        \"qa_salary_after_6_months\": {\"type\": \"integer\"},\r",
+							"        \"start_qa_salary\": {\"type\": \"integer\"}\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"// Проверяем соответствие схемы JSON с этолоном сверху\r",
+							"pm.test(\"Validate schema\", () => {\r",
+							"    pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							"\r",
+							"// Тест правильности перемножения на коэфициенты\r",
+							"// Сохраняем в jsonData массив ответ от сервера в JSON формате\r",
+							"var jsonData = pm.response.json();\r",
+							"// Сохраняем значение первоначальной зарплаты \r",
+							"var salarySent = jsonData.start_qa_salary;\r",
+							"// Вариант var salarySent = jsonData['person']['u_name'][1];\r",
+							"// Выводим в консоль значение salarySent\r",
+							"console.log(salarySent);\r",
+							"\r",
+							"// Сравниваем значение коффициентов, применяемых для 6 или 12 месячных зарплат\r",
+							"pm.test(\"Validate 6 month and 12 month and 1.5_year and 3.5_years salary multiplier\", () => {\r",
+							"    salarySent * 2 === parseInt(jsonData['qa_salary_after_6_months']) &&\r",
+							"    salarySent * 2.7 === parseInt(jsonData['qa_salary_after_12_months']) &&\r",
+							"    salarySent * 3.3 === parseInt(jsonData['qa_salary_after_1.5_year']) &&\r",
+							"    salarySent * 3.8 === parseInt(jsonData['qa_salary_after_3.5_years'])\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://116.203.27.46:5002/object_info_2?age=32&salary=5000&name=Iren",
+					"protocol": "http",
+					"host": [
+						"116",
+						"203",
+						"27",
+						"46"
+					],
+					"port": "5002",
+					"path": [
+						"object_info_2"
+					],
+					"query": [
+						{
+							"key": "age",
+							"value": "32"
+						},
+						{
+							"key": "salary",
+							"value": "5000"
+						},
+						{
+							"key": "name",
+							"value": "Iren"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7_User_info_3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// проверка структуры JSON в ответе\r",
+							"var schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"age\": {\"type\": \"string\"},\r",
+							"        \"family\": {\"type\": \"object\",\r",
+							"            \"properties\": {\"children\":{ \r",
+							"                    \"type\": \"array\",\r",
+							"                    \"items\": [\r",
+							"                        {\"type\": \"array\",\r",
+							"                        \"items\": [\r",
+							"                        {\"type\": \"string\"},\r",
+							"                        {\"type\": \"number\"}\r",
+							"                    ]},\r",
+							"                {\"type\": \"array\",\r",
+							"                    \"items\": [\r",
+							"                        {\"type\": \"string\"},\r",
+							"                        {\"type\": \"number\"}\r",
+							"                    ]}\r",
+							"                ]\r",
+							"            },\r",
+							"                \"u_salary_1_5_year\": {\"type\": \"number\"}\r",
+							"            }\r",
+							"        },\r",
+							"        \"name\": {\"type\": \"string\"},\r",
+							"        \"salary\": {\"type\": \"number\"}\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Validate schema\", () => {\r",
+							"    pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							"\r",
+							"//Сравнение значений поля name в запросе и ответе через помещение name запроса и ответа в переменные окружения\r",
+							"pm.test(\"Сравнение идентичности поля name в ответе и запросе\", () => {\r",
+							"    pm.environment.set('nameResponse', pm.response.json().name)\r",
+							"    pm.environment.set('nameRequest', request.data.name)\r",
+							"    'nameRequest' === 'nameResponse'\r",
+							"});\r",
+							"\r",
+							"// Значение поля age в request равно age в response\r",
+							"pm.test(\"Сравнение идентичности поля age в ответе и запросе\", () => {\r",
+							"  const requestBody = JSON.parse(request.data.age);\r",
+							"  const jsonData = pm.response.json();\r",
+							"  const responseAgeInt = parseInt(jsonData['age'])\r",
+							"  pm.expect(responseAgeInt).to.equal(requestBody);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "age",
+							"value": "48",
+							"type": "text"
+						},
+						{
+							"key": "salary",
+							"value": "15000",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Ksenya",
+							"type": "text"
+						},
+						{
+							"key": "",
+							"value": "",
+							"description": "29",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://116.203.27.46:5002/user_info_3",
+					"protocol": "http",
+					"host": [
+						"116",
+						"203",
+						"27",
+						"46"
+					],
+					"port": "5002",
+					"path": [
+						"user_info_3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8_User_info_4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Проверка статус код 200\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"// Проверка структуры JSON в ответе\r",
+							"var schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\":{\r",
+							"        \"age\": {\"type\": \"number\"},\r",
+							"        \"name\": {\"type\": \"string\"},\r",
+							"        \"salary\": {\r",
+							"            \"type\":\"array\",\r",
+							"            \"items\":[\r",
+							"                {\"type\": \"number\"},\r",
+							"                {\"type\": \"string\"},\r",
+							"                {\"type\": \"string\"}\r",
+							"            ]\r",
+							"        }\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"// Проверяем соответствие схемы JSON с этолоном сверху\r",
+							"pm.test(\"Validate schema\", () => {\r",
+							"    pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"// Проверка коэффицентов умножения salary\r",
+							"var initialSalary = parseInt (jsonData['salary'][0])\r",
+							"var resp_salary_after_5_months = parseInt(jsonData['salary'][1])\r",
+							"var  resp_u_salary_12_months = parseInt(jsonData['salary'][2])\r",
+							"pm.test(\"Validate 5 month and 12_months salary multiplier\", () => {\r",
+							"    initialSalary * 2.5 == resp_salary_after_5_months &&\r",
+							"    initialSalary * 3.5 == resp_u_salary_12_months;\r",
+							"});\r",
+							"\r",
+							"// Проверка: 2-й элемент массива больше 1-го и 0-го\r",
+							"pm.test(\"Check [2] array element > [1] and [0]\", () => {\r",
+							"    parseInt(jsonData['salary'][2]) > parseInt(jsonData['salary'][1]) &&\r",
+							"    parseInt(jsonData['salary'][2]) > parseInt(jsonData['salary'][0]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "age",
+							"value": "18",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Ira",
+							"type": "text"
+						},
+						{
+							"key": "salary",
+							"value": "4000",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://116.203.27.46:5002/user_info_4",
+					"protocol": "http",
+					"host": [
+						"116",
+						"203",
+						"27",
+						"46"
+					],
+					"port": "5002",
+					"path": [
+						"user_info_4"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
