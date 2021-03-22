@@ -1,0 +1,182 @@
+{
+	"info": {
+		"_postman_id": "8afbf616-f13a-4553-acf2-96561148d5b4",
+		"name": "Endpoint_3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "4_Object_info_4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Проверка статус код 200\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"// Проверка структуры JSON в ответе\r",
+							"var schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\":{\r",
+							"        \"age\": {\"type\": \"number\"},\r",
+							"        \"name\": {\"type\": \"string\"},\r",
+							"        \"salary\": {\r",
+							"            \"type\":\"array\",\r",
+							"            \"items\":[\r",
+							"                {\"type\": \"number\"},\r",
+							"                {\"type\": \"string\"},\r",
+							"                {\"type\": \"string\"}\r",
+							"            ]\r",
+							"        }\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"// Проверяем соответствие схемы JSON с этолоном сверху\r",
+							"pm.test(\"Validate schema\", () => {\r",
+							"    pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"// Проверка коэффицентов умножения salary\r",
+							"var initialSalary = parseInt (jsonData['salary'][0])\r",
+							"var resp_salary_after_8_months = parseInt(jsonData['salary'][1])\r",
+							"var  resp_u_salary_2_5_year = parseInt(jsonData['salary'][2])\r",
+							"pm.test(\"Validate 8 month and 2_5Year salary multiplier\", () => {\r",
+							"    initialSalary * 2 == resp_salary_after_8_months &&\r",
+							"    initialSalary * 3 == resp_u_salary_2_5_year;\r",
+							"});\r",
+							"\r",
+							"\r",
+							"// Проверка: 2-й элемент массива больше 1-го и 0-го\r",
+							"pm.test(\"Check [2] array element > [1] and [0]\", () => {\r",
+							"    parseInt(jsonData['salary'][2]) > parseInt(jsonData['salary'][1]) &&\r",
+							"    parseInt(jsonData['salary'][2]) > parseInt(jsonData['salary'][0]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://116.203.27.46:5002/object_info_4?age=30&name=Baron&salary=10000",
+					"protocol": "http",
+					"host": [
+						"116",
+						"203",
+						"27",
+						"46"
+					],
+					"port": "5002",
+					"path": [
+						"object_info_4"
+					],
+					"query": [
+						{
+							"key": "age",
+							"value": "30"
+						},
+						{
+							"key": "name",
+							"value": "Baron"
+						},
+						{
+							"key": "salary",
+							"value": "10000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5_User_info_1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Проверка статуса кода 200\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Проверка структуры JSON в ответе \r",
+							"var schema = {\r",
+							"    \"tupe\": \"object\",\r",
+							"    \"propertis\": {\r",
+							"        \"age\": {\"tupe\": \"number\"},\r",
+							"        \"daily_food\": {\"tupe\": \"number\"},\r",
+							"        \"name\": {\"tupe\": \"string\"}\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Validate schema\", () => {\r",
+							"    pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"// Проверка коэффициентов умножения weight\r",
+							"let jsonData = pm.response.json();\r",
+							"let dailyFood = jsonData['daily_food']\r",
+							"let dailySleep = jsonData[' dailySleep']\r",
+							"let weight = request.data.weight\r",
+							"pm.test('Validate daily_food and dailySleep multiplier', () => {\r",
+							"    weight * 0.012 === dailyFood &&\r",
+							"    weight * 2.5 === dailySleep;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "age",
+							"value": "12",
+							"type": "text"
+						},
+						{
+							"key": "weight",
+							"value": "7",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Dog_Bobik",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://116.203.27.46:5002/user_info_1",
+					"protocol": "http",
+					"host": [
+						"116",
+						"203",
+						"27",
+						"46"
+					],
+					"port": "5002",
+					"path": [
+						"user_info_1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
